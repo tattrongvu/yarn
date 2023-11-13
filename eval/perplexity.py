@@ -181,6 +181,5 @@ if __name__ == "__main__":
     parser.add_argument("--output-file", type=str)
     parser.add_argument("--aggressive-memory", action="store_true")
     parser.add_argument("--hide-progress", action="store_true")
-    parser.add_argument("--model-device", type=str, default='auto')
     parser.add_argument("--token-device", type=str, default='cuda:0')
     main(add_args(parser).parse_args())
