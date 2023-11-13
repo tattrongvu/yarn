@@ -90,7 +90,7 @@ def load_model(model, args):
     loaded = model_cls.from_pretrained(
         model,
         torch_dtype=torch_dtype,
-        device_map="auto",
+        device_map=args.model_device,
         trust_remote_code=not args.custom_model,
         config=config,
         quantization_config=quantization_config,
@@ -124,6 +124,7 @@ def add_args(parser: ArgumentParser):
     parser.add_argument("--custom-model-mistral", action="store_true")
     parser.add_argument("--flash-attention", action="store_true")
     parser.add_argument("--no-use-cache", action="store_true")
+    parser.add_argument("--model-device", type=str, default='auto')
     return parser
 
 

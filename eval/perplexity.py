@@ -13,12 +13,7 @@ def compute_perplexity(
     encodings, model, tokenizer, add_start_token: bool = True, device=None, max_length=None, sliding_window=256, truncate=False, aggressive_memory=False, hide_progress=False,
 ):
     r"""Compute "sliding window" perplexity on a dataset. Validated against the calculations reported in arXiv 2306.15595"""
-    if device is not None:
-        assert device in ["gpu", "cpu",
-                          "cuda"], "device should be either gpu or cpu."
-        if device == "gpu":
-            device = "cuda"
-    else:
+    if device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
     if add_start_token:
@@ -149,7 +144,7 @@ def main(args):
 
         result = []
         for max_length in tokens:
-            ppl = compute_perplexity(model=loaded, tokenizer=tokenizer, encodings=input_texts,
+            ppl = compute_perplexity(model=loaded, tokenizer=tokenizer, device=args.token_device,encodings=input_texts,
                                      add_start_token=tokenizer.bos_token is not None, max_length=max_length,
                                      sliding_window=args.sliding_window, truncate=args.truncate,
                                      aggressive_memory=args.aggressive_memory, hide_progress=args.hide_progress)['mean_perplexity']
@@ -186,4 +181,6 @@ if __name__ == "__main__":
     parser.add_argument("--output-file", type=str)
     parser.add_argument("--aggressive-memory", action="store_true")
     parser.add_argument("--hide-progress", action="store_true")
+    parser.add_argument("--model-device", type=str, default='auto')
+    parser.add_argument("--token-device", type=str, default='cuda:0')
     main(add_args(parser).parse_args())
