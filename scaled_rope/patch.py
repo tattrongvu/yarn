@@ -1,5 +1,9 @@
 import torch
 
+def patch_falcon_for_linear_scaled_rotary_embeddings(model, scale):
+    from transformers.models.falcon.modeling_falcon import FalconLinearScalingRotaryEmbedding
+    for each in model.transformer.h:
+        each.self_attention.maybe_rotary = FalconLinearScalingRotaryEmbedding(each.self_attn.head_dim, scaling_factor=scale)
 
 def patch_llama_for_dynamic_scaled_rotary_embeddings(model, ntk):
     from .LlamaDynamicScaledRotaryEmbedding import LlamaDynamicScaledRotaryEmbedding
