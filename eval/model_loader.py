@@ -177,7 +177,7 @@ def apply_patches(model, args):
             if "LlamaForCausalLM" in model.config.architectures:
                 patch_llama_for_linear_scaled_rotary_embeddings(
                     model, scale=args.linear)
-            elif "RWForCausalLM" in model.config.architectures:
+            elif "FalconForCausalLM" in model.config.architectures:
                 patch_falcon_for_linear_scaled_rotary_embeddings(model, scale=args.linear)
             else:
                 raise RuntimeError(
