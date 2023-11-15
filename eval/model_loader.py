@@ -91,7 +91,7 @@ def load_model(model, args):
         model,
         torch_dtype=torch_dtype,
         device_map=args.model_device,
-        trust_remote_code=not args.custom_model,
+        trust_remote_code=True if args.trust_remote_code else False,
         config=config,
         quantization_config=quantization_config,
         use_flash_attention_2=args.flash_attention,
@@ -113,6 +113,7 @@ def add_args(parser: ArgumentParser):
     parser.add_argument("--factor", type=float)
     parser.add_argument("--load-in-8bit", action="store_true")
     parser.add_argument("--load-in-4bit", action="store_true")
+    parser.add_argument("--trust-remote-code", action="store_true")
     parser.add_argument("--finetuned", action="store_true")
     parser.add_argument("--gpt-neox-max-length", type=int)
     parser.add_argument("--adapter", type=str)
