@@ -26,6 +26,16 @@ def load_model(model, args):
 
     config = config_cls.from_pretrained(
         model, trust_remote_code=True if args.trust_remote_code else False)
+    if args.linear:
+        config.rope_scaling = {
+            "type": "linear",
+            "factor": args.linear
+        }
+    elif args.dynamic_ntk:
+        config.rope_scaling = {
+            "type": "dynamic",
+            "factor": args.dynamic_ntk
+        }
     if args.max_position_embeddings:
         config.max_position_embeddings = args.max_position_embeddings
     if args.factor:
@@ -37,6 +47,7 @@ def load_model(model, args):
     if args.sliding_window_attention:
         config.sliding_window = args.sliding_window_attention
     if args.custom_model or args.custom_model_together or args.custom_model_mistral:
+        '''
         if args.linear:
             config.rope_scaling = {
                 "type": "linear",
@@ -47,7 +58,8 @@ def load_model(model, args):
                 "type": "dynamic",
                 "factor": args.dynamic_ntk
             }
-        elif args.part_ntk:
+        '''
+        if args.part_ntk:
             config.rope_scaling = {
                 "type": "ntk-by-parts",
                 "factor": args.part_ntk
@@ -96,7 +108,7 @@ def load_model(model, args):
         config=config,
         quantization_config=quantization_config,
         use_flash_attention_2=args.flash_attention,
-        rope_scaling={"type":"linear","factor":args.linear} if args.linear else {"type":"dynamic","factor":args.dynamic_ntk} if args.dynamic_ntk else None
+        #rope_scaling={"type":"linear","factor":args.linear} if args.linear else {"type":"dynamic","factor":args.dynamic_ntk} if args.dynamic_ntk else None
     )
 
     return loaded
