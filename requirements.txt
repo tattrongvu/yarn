@@ -2,6 +2,7 @@ accelerate
 datasets
 evaluate
 torch>=2
+optimum
 transformers>=4.34.0
 tqdm
 einops
