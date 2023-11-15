@@ -20,11 +20,12 @@ def load_model(model, args):
         model_cls = MistralForCausalLM
         config_cls = MistralConfig
     else:
+        print("Using AutoModel loader!")
         model_cls = AutoModelForCausalLM
         config_cls = AutoConfig
 
     config = config_cls.from_pretrained(
-        model, trust_remote_code=not args.custom_model)
+        model, trust_remote_code=True if args.trust_remote_code else False)
     if args.max_position_embeddings:
         config.max_position_embeddings = args.max_position_embeddings
     if args.factor:
