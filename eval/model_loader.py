@@ -156,13 +156,6 @@ def apply_patches(model, args):
             else:
                 raise RuntimeError(
                     f"Unsupported architecture {model.config.architectures} for dyanmic linear")
-        elif args.dynamic_ntk:
-            if "LlamaForCausalLM" in model.config.architectures:
-                patch_llama_for_dynamic_scaled_rotary_embeddings(
-                    model, ntk=args.dynamic_ntk)
-            else:
-                raise RuntimeError(
-                    f"Unsupported architecture {model.config.architectures} for dyanmic ntk")
         elif args.dynamic_part_ntk:
             if "LlamaForCausalLM" in model.config.architectures:
                 patch_llama_for_dynamic_part_ntk_rotary_embeddings(
@@ -222,7 +215,16 @@ def apply_patches(model, args):
             #elif "FalconForCausalLM" in model.config.architectures:
             #    patch_falcon_for_linear_scaled_rotary_embeddings(model, scale=args.linear)
         '''
-
+        '''
+        elif args.dynamic_ntk:
+            if "LlamaForCausalLM" in model.config.architectures:
+                patch_llama_for_dynamic_scaled_rotary_embeddings(
+                    model, ntk=args.dynamic_ntk)
+            else:
+                raise RuntimeError(
+                    f"Unsupported architecture {model.config.architectures} for dyanmic ntk")
+        '''
+        
     if args.adapter:
         from peft import PeftModel
         model = PeftModel.from_pretrained(model, args.adapter)
