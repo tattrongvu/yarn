@@ -95,6 +95,7 @@ def load_model(model, args):
         config=config,
         quantization_config=quantization_config,
         use_flash_attention_2=args.flash_attention,
+        rope_scaling={"type":"linear","factor":args.linear} if args.linear else {"type":"dynamic","factor":args.dynamic_ntk} if args.dynamic_ntk else None
     )
 
     return loaded
@@ -178,8 +179,10 @@ def apply_patches(model, args):
             if "LlamaForCausalLM" in model.config.architectures:
                 patch_llama_for_linear_scaled_rotary_embeddings(
                     model, scale=args.linear)
+            '''
             elif "FalconForCausalLM" in model.config.architectures:
                 patch_falcon_for_linear_scaled_rotary_embeddings(model, scale=args.linear)
+            '''
             else:
                 raise RuntimeError(
                     f"Unsupported architecture {model.config.architectures} for linear")
