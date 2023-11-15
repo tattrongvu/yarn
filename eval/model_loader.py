@@ -153,7 +153,7 @@ def apply_patches(model, args):
             if "LlamaForCausalLM" in model.config.architectures:
                 patch_llama_for_dynamic_part_ntk_rotary_embeddings(
                     model, args.finetuned)
-            elif "RWForCausalLM" in model.config.architectures:
+            elif "FalconForCausalLM" in model.config.architectures:
                 patch_falcon_for_dynamic_part_ntk_rotary_embeddings(model)
             else:
                 raise RuntimeError(
