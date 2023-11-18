@@ -111,6 +111,14 @@ def load_model(model, args):
         #rope_scaling={"type":"linear","factor":args.linear} if args.linear else {"type":"dynamic","factor":args.dynamic_ntk} if args.dynamic_ntk else None
     )
 
+    #if args.model_device=='cpu':
+    if args.optimized_engine=='better':
+        print('Using optimum better transformer.')
+        loaded.to_bettertransformer()
+        '''
+        from optimum.bettertransformer import BetterTransformer
+        loaded=BetterTransformer.transform(loaded)
+        '''
     return loaded
 
 
@@ -140,6 +148,7 @@ def add_args(parser: ArgumentParser):
     parser.add_argument("--flash-attention", action="store_true")
     parser.add_argument("--no-use-cache", action="store_true")
     parser.add_argument("--model-device", type=str, default='auto')
+    parser.add_argument("--optimized-engine", type=str, default='better')
     return parser
 
 
